@@ -9,6 +9,7 @@ const {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose.js');
 var {User} = require('./models/user.js');
 var {Todo} = require('./models/todo.js');
+var {authenticate} = require('./middleware/authenticate.js');
 
 var app = express();
 
@@ -96,6 +97,10 @@ app.post('/users', (req, res) => {
 	}).catch((error) => {
 		res.status(400).send(error);
 	});
+});
+
+app.get('/users/me', authenticate, (req, res) => {
+	res.send(req.user);
 });
 
 var port = process.env.PORT || 3000;
